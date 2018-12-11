@@ -28,6 +28,7 @@ import java.util.List;
 @RestController
 public class SearchController {
 
+    @CrossOrigin("*")
     @RequestMapping(value = "/search", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String search(HttpServletRequest request,
                          @RequestParam("file") MultipartFile file,

@@ -49,12 +49,11 @@ function initAll()
         $('#btn').click(function(e){
             var formData = new FormData();
             formData.append('file', $('#file')[0].files[0]);
-            formData.append('algorithm', $('#select').value);
             $.ajax({
-                url:'http://101.132.123.33:8080/search',
+                url:'http://127.0.0.1:17777/search/' + $('#select')[0].value,
                 type:"POST",
                 processData:false,
-                contentType:false,
+                contentType: false,
                 data:formData,
                 dataType:'json',
                 crossDomain:true,
