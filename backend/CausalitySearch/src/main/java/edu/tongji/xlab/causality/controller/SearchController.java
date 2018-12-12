@@ -29,10 +29,10 @@ import java.util.List;
 public class SearchController {
 
     @CrossOrigin("*")
-    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+    @RequestMapping(value = "/search/{algorithm}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
     public String search(HttpServletRequest request,
                          @RequestParam("file") MultipartFile file,
-                         @RequestParam("algorithm") String algorithm) throws IOException {
+                         @PathVariable String algorithm) throws IOException {
         JSONObject resultJson = new JSONObject();
         if (!file.isEmpty()) {
             String fileName = file.getOriginalFilename();
