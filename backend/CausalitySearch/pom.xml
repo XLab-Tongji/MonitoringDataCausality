@@ -123,18 +123,6 @@
             <artifactId>jsoup</artifactId>
             <version>1.11.2</version>
         </dependency>
-        <dependency>
-            <groupId>edu.cmu</groupId>
-            <artifactId>tetrad-gui</artifactId>
-            <version>6.6.0-SNAPSHOT</version>
-            <scope>compile</scope>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <!--<dependency>-->
             <!--<groupId>edu.pitt.dbmi</groupId>-->
