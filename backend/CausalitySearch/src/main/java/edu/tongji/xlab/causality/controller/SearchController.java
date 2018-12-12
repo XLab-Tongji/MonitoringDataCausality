@@ -30,7 +30,8 @@ public class SearchController {
 
     @CrossOrigin("*")
     @RequestMapping(value = "/search/{algorithm}", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-    public String search(HttpServletRequest request,
+//@RequestMapping(value = "/search/{algorithm}", method = RequestMethod.POST)
+public String search(HttpServletRequest request,
                          @RequestParam("file") MultipartFile file,
                          @PathVariable String algorithm) throws IOException {
         JSONObject resultJson = new JSONObject();
@@ -40,6 +41,15 @@ public class SearchController {
             File destFile = new File(destFileName);
             destFile.getParentFile().mkdirs();
             file.transferTo(destFile);
+
+//            FileInputStream fis = new FileInputStream(destFile);
+//
+//            int oneByte;
+//            while ((oneByte = fis.read()) != -1) {
+//                System.out.write(oneByte);
+//                // System.out.print((char)oneByte); // could also do this
+//            }
+//            System.out.flush();
 
             Delimiter delimiter = Delimiter.COMMA;
             DataValidation validatior = new ContinuousTabularDataFileValidation(destFile, delimiter);
@@ -113,6 +123,7 @@ public class SearchController {
             return resultJson.toJSONString();
 
         } else {
+            System.out.println("The file is empty");
             resultJson.put("code", 406);
             resultJson.put("msg", "The file is empty");
             return resultJson.toJSONString();
