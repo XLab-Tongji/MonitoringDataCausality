@@ -204,7 +204,7 @@
                             </includes>
                         </resource>
                         <resource>
-                            <directory>src/main/resources</directory>
+                            <directory>${basedir}/src/main/resources</directory>
                             <targetPath>BOOT-INF/classes/</targetPath>
                         </resource>
                     </resources>

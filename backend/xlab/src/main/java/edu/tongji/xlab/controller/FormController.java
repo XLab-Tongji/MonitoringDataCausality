@@ -41,7 +41,7 @@ public class FormController {
         model.addAttribute("data", "");
         if (file.isEmpty()) {
             model.addAttribute("message", "File is empty");
-            return "/display";
+            return "display";
         }
         try {
             String fileName = file.getOriginalFilename();
@@ -120,6 +120,6 @@ public class FormController {
             e.printStackTrace();
 
         }
-        return "/display";
+        return "display";
     }
 }
