@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>graph</title>
+    <script src="jquery.js"></script>
+    <script src="https://d3js.org/d3.v5.js"></script>
+    <script src="index2.js"></script>
+    <link href="index.css" rel="stylesheet" />
+</head>
+<body>
+<div class="upload_file_div">
+    <form enctype="multipart/form-data" method="post" name="fileinfo" id="form">
+        <div id="select_div">
+            <label>选择文件:&nbsp;&nbsp;</label>
+            <input type="file" name="file" id="file" required /><br /><br />
+            <label>选择分析算法：</label>
+            <select name="algorithm" id="select">
+                <option>Fci</option>
+                <option>Pc</option>
+            </select>
+        </div>
+        <div id="submit_div">
+        <input type="button" name="btn" id="submit_btn" value="提交" />
+        </div>
+    </form>
+</div>
+</body>
+</html>
