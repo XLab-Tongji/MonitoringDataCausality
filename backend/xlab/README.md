@@ -12,4 +12,4 @@ Upload file on the page
 
 ![upload](image/upload.png)
 
-And you will the causality graph of uploaded data.![result](image/result.png)
+And you will get the causality graph of uploaded data.![result](image/result.png)
