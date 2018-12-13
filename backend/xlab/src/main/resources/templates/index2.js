@@ -2,8 +2,10 @@ window.addEventListener('load', initAll);
 
 function initAll() {
     $(document).ready(function () {
+        $('#fountainG').hide();
         //上传文件按钮
         $('#submit_btn').click(function (e) {
+            cleanShow();
             var formData = new FormData();
             formData.append('file', $('#file')[0].files[0]);
             $.ajax({
@@ -15,21 +17,13 @@ function initAll() {
                 dataType: 'json',
                 crossDomain: true,
                 success: function (fb_data) {
+                    // $('#fountainG').show();
                     // console.log(fb_data['msg']);
                     if (fb_data['msg'] == 'Success' && fb_data['code'] == 200) {
                         // console.log(fb_data['data']);
                         let analysis_result = $.parseJSON(fb_data['data']);
                         cleanShow();
                         buildShow(analysis_result);
-                    }
-
-                    function cleanShow() {
-                        d3.select('svg.total_graph').remove();
-                        d3.select('p.sub_paths_string_div').remove();
-                        // span1.text("无");
-                        // d3.select('div.text_div').remove();
-                        // d3.select('span').remove();
-                        d3.select('div.text_tree_div').remove();
                     }
 
                     function buildShow(jsonObj) {
@@ -631,7 +625,7 @@ function initAll() {
 
                                 var tree_div = d3.select('div.text_tree_div').append('div').attr('class','tree_div');
                                 var svg = d3.select("div.tree_div").append('svg')
-                                    // .attr("width", width + margin.left + margin.right)
+                                // .attr("width", width + margin.left + margin.right)
                                     .attr('width','100%')
                                     .attr('height', height + margin.top + margin.bottom)
                                     .append('g')
@@ -716,12 +710,26 @@ function initAll() {
                 },
                 error: function (msg) {
                     alert('error');
-                },
-                complete:function(){
-                    console.log('complete');
                 }
             });
 
-        })
+        });
+        loadingEffect();
+        function loadingEffect() {
+            var loading = $('#fountainG');
+            loading.hide();
+            $(document).ajaxStart(function () {
+                loading.show();
+            }).ajaxStop(function () {
+                loading.hide();
+            });
+        }
+
+        function cleanShow() {
+            d3.select('svg.total_graph').remove();
+            d3.select('p.sub_paths_string_div').remove();
+            d3.select('div.text_tree_div').remove();
+        }
+
     })
 }
