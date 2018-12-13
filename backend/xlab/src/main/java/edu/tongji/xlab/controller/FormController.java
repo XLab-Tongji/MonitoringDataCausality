@@ -31,11 +31,13 @@ import java.io.File;
 @Controller
 public class FormController {
 
+    @CrossOrigin("*")
     @RequestMapping("/")
     public String formData() {
         return "upload";
     }
 
+    @CrossOrigin("*")
     @RequestMapping("/upload")
     public String upload(HttpServletRequest request, @RequestParam("file") MultipartFile file, @RequestParam("algorithm") String algorithm, Model model) throws IOException {
         model.addAttribute("data", "");
