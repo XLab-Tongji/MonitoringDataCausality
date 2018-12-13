@@ -1,6 +1,7 @@
 body
 {
     font:10px sans-serif;
+    font-family: "Kaiti SC", "Microsoft Sans Serif","SansSerif","SimSun","Adobe Arabic";
 }
 
 div.upload_file_div
@@ -18,7 +19,7 @@ div.upload_file_div
     /*margin-right: auto;*/
     top:20px;
     font-size:12px;
-    font-family: "Kaiti SC", "Microsoft Sans Serif","SansSerif","SimSun","Adobe Arabic";
+    /*font-family: "Kaiti SC", "Microsoft Sans Serif","SansSerif","SimSun","Adobe Arabic";*/
 }
 #select_div
 {
