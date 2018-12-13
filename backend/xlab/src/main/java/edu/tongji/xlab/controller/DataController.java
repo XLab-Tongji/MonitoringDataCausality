@@ -1,5 +1,6 @@
 package edu.tongji.xlab.controller;
 
+import edu.tongji.xlab.util.Response;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -28,22 +29,18 @@ import java.util.LinkedList;
 import java.util.List;
 import java.io.File;
 
-@Controller
-public class FormController {
+@RestController
+public class DataController {
 
     @CrossOrigin("*")
-    @RequestMapping("/")
-    public String formData() {
-        return "upload";
-    }
-
-    @CrossOrigin("*")
-    @RequestMapping("/upload")
-    public String upload(HttpServletRequest request, @RequestParam("file") MultipartFile file, @RequestParam("algorithm") String algorithm, Model model) throws IOException {
-        model.addAttribute("data", "");
+    @PostMapping("/causality")
+    public Response upload(HttpServletRequest request, @RequestParam("file") MultipartFile file, @RequestParam("algorithm") String algorithm) throws IOException {
+//        model.addAttribute("data", "");
+        Response response;
         if (file.isEmpty()) {
-            model.addAttribute("message", "File is empty");
-            return "display";
+            response = new Response(406, "The file is empty.");
+//            model.addAttribute("message", "File is empty");
+//            return "display";
         }
         try {
             String fileName = file.getOriginalFilename();
@@ -109,19 +106,22 @@ public class FormController {
                     destFile.delete();
                 }
 
-                model.addAttribute("message", algorithm);
-                model.addAttribute("data", jsonText);
+//                model.addAttribute("message", algorithm);
+//                model.addAttribute("data", jsonText);
+                response = new Response(200, "Success", jsonText);
 
             } catch (IOException e) {
 
-                model.addAttribute("message", "error");
+//                model.addAttribute("message", "error");
+                response = new Response(500, "Error");
 
             }
         } catch (Exception e) {
 
             e.printStackTrace();
-
+            response = new Response(500, "Error");
         }
-        return "display";
+//        return "display";
+        return response;
     }
 }
