@@ -31,12 +31,12 @@
 <div class="upload_file_div">
     <form enctype="multipart/form-data" method="post" name="fileinfo" id="form">
         <div id="select_div">
-            <label>选择文件:&nbsp;&nbsp;</label>
+            <label>选择数据集文件:&nbsp;&nbsp;</label>
             <input type="file" name="file" id="file" required /><br /><br />
-            <label>选择分析算法：</label>
+            <label>因果搜索前提条件：</label>
             <select name="algorithm" id="select">
-                <option>Fci</option>
-                <option>Pc</option>
+                <option value="Fci">存在潜变量</option>
+                <option value="Pc">不存在潜变量</option>
             </select>
         </div>
         <div id="submit_div">
