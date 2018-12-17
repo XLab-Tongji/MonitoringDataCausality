@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import edu.tongji.xlab.data.DataModel;
 import edu.tongji.xlab.data.DataSet;
+import edu.tongji.xlab.data.DataUtils;
 import edu.tongji.xlab.graph.Graph;
 import edu.tongji.xlab.search.Fci;
 import edu.tongji.xlab.search.IndTestFisherZ;
@@ -88,7 +89,8 @@ public class SearchController {
                 else {
                     System.out.println("Not a DataSet, Terminated");
                 }
-                IndTestFisherZ indtest = new IndTestFisherZ((DataSet) datamodel, 0.01);
+                DataSet filteredSet = DataUtils.removeConstantColumns((DataSet) datamodel);
+                IndTestFisherZ indtest = new IndTestFisherZ(filteredSet, 0.01);
 
                 String jsonText = new String();
 
