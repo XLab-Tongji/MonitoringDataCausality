@@ -79,14 +79,16 @@ public class DataController {
             dataReader = new ContinuousTabularDataFileReader(destFile, delimiter);
 
             try {
-                Dataset dataset = dataReader.readInData();
+                Dataset dataset = dataReader.readInData();      
                 DataModel datamodel = DataConvertUtils.toDataModel(dataset);
+                
                 if (datamodel instanceof DataSet)
                     System.out.println("This is a DataSet");
                 else {
                     System.out.println("Not a DataSet, Terminated");
                 }
-                IndTestFisherZ indtest = new IndTestFisherZ((DataSet) datamodel, 0.01);
+                DataSet filteredSet = DataUtils.removeConstantColumns((DataSet) datamodel);
+                IndTestFisherZ indtest = new IndTestFisherZ(filteredSet, 0.01);
 
                 String jsonText = new String();
 
