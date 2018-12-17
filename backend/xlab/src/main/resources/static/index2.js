@@ -22,6 +22,13 @@ function initAll() {
                     // $('#fountainG').show();
                     // console.log(fb_data['msg']);
                     // if (fb_data['msg'] == 'Success' && fb_data['code'] == 200) {
+                    if (fb_data.code == 500)
+                    {
+                        cleanShow();
+                        var error_message = fb_data.message;
+                        alert(error_message);
+                        return;
+                    }
                     if (fb_data.message == 'Success' && fb_data.code == 200) {
                         // console.log(fb_data['data']);
                         let analysis_result = $.parseJSON(fb_data.data);
