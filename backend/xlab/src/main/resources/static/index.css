@@ -25,6 +25,12 @@ div.upload_file_div
 {
 
 }
+div#legend
+{
+    position:absolute;
+    top:0px;
+    right:-300px;
+}
 #submit_div
 {
     text-align: center;
