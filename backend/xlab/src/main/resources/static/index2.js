@@ -9,6 +9,7 @@ function initAll() {
             var formData = new FormData();
             formData.append('file', $('#file')[0].files[0]);
             formData.append("algorithm", $('#select')[0].value);
+            formData.append('format', $('#format')[0].value);
             $.ajax({
                 // url: 'http://10.60.38.182:10080/search/' + $('#select')[0].value,
                 url: window.location + "causality",

@@ -35,13 +35,14 @@ public class DataController {
 
     @CrossOrigin("*")
     @PostMapping("/causality")
-    public Response upload(HttpServletRequest request, @RequestParam("file") MultipartFile file, @RequestParam("algorithm") String algorithm) throws IOException {
+    public Response upload(HttpServletRequest request,
+                           @RequestParam("file") MultipartFile file,
+                           @RequestParam("algorithm") String algorithm,
+                           @RequestParam("format") String format) throws IOException {
 //        model.addAttribute("data", "");
         Response response;
         if (file.isEmpty()) {
-            response = new Response(406, "The file is empty.");
-//            model.addAttribute("message", "File is empty");
-//            return "display";
+            response = new Response(500, "The file is empty.");
         }
         try {
             String fileName = file.getOriginalFilename();
@@ -92,15 +93,18 @@ public class DataController {
                 IndTestFisherZ indtest = new IndTestFisherZ(filteredSet, 0.01);
 
                 String jsonText = new String();
-
+                Graph graph = null;
                 if (algorithm.equals("Fci")) {
                     Fci fci = new Fci(indtest);
-                    Graph graph = fci.search();
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    jsonText = gson.toJson(graph);
+                    graph = fci.search();
                 } else if (algorithm.equals("Pc")) {
                     Pc pc = new Pc(indtest);
-                    Graph graph = pc.search();
+                    graph = pc.search();
+                }
+
+                if (format.equals("text")) {
+                    jsonText = graph.toString();
+                } else {
                     Gson gson = new GsonBuilder().setPrettyPrinting().create();
                     jsonText = gson.toJson(graph);
                 }
@@ -109,22 +113,15 @@ public class DataController {
                     destFile.delete();
                 }
 
-//                model.addAttribute("message", algorithm);
-//                model.addAttribute("data", jsonText);
                 response = new Response(200, "Success", jsonText);
 
             } catch (IOException e) {
-
-//                model.addAttribute("message", "error");
                 response = new Response(500, "Error");
-
             }
         } catch (Exception e) {
-
             e.printStackTrace();
             response = new Response(500, "Error");
         }
-//        return "display";
         return response;
     }
 }
