@@ -12,7 +12,8 @@ function initAll() {
             formData.append('format', $('#format')[0].value);
             $.ajax({
                 // url: 'http://10.60.38.182:10080/search/' + $('#select')[0].value,
-                url: window.location + "causality",
+                // url: window.location + "causality",
+                url: window.location + "search/"+$('#select')[0].value,
                 type: "POST",
                 processData: false,
                 contentType: false,
