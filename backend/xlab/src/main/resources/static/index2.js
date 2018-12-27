@@ -176,6 +176,7 @@ function initAll() {
                             //构建了11层的因节点颜色
                             var cause_layer_color =
                                 [
+                                    '#f188df',
                                     '#FFC0CB',
                                     '#f19c88',
                                     '#f19188',
@@ -183,8 +184,9 @@ function initAll() {
                                     '#f1889f',
                                     '#f188aa',
                                     '#f188c3',
-                                    '#f188d0',
-                                    '#f188df'];
+                                    '#f188d0'
+                                    // '#f188df'
+                                ];
 
                             //path颜色
                             var usual_path_color = '#62aeef';
@@ -563,7 +565,8 @@ function initAll() {
                                         if (d.name === current_clicked_node_name) {
                                             return target_color;
                                         }
-                                        return cause_layer_color[current_source_layer - 1];
+                                        var color_layer_num = current_source_layer % cause_layer_color.length;
+                                        return cause_layer_color[color_layer_num];
                                     }
                                     else {
                                         return usual_color;
