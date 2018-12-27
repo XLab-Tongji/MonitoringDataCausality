@@ -12,8 +12,10 @@ function initAll() {
             formData.append('format', $('#format')[0].value);
             $.ajax({
                 // url: 'http://10.60.38.182:10080/search/' + $('#select')[0].value,
-                // url: window.location + "causality",
-                url: window.location + "search/"+$('#select')[0].value,
+                // url: 'http://10.60.38.182:10080/causality',
+
+                url: window.location + "causality",
+                // url: window.location + "search/"+$('#select')[0].value,
                 type: "POST",
                 processData: false,
                 contentType: false,
@@ -24,6 +26,7 @@ function initAll() {
                     // $('#fountainG').show();
                     // console.log(fb_data);
                     // if (fb_data['msg'] == 'Success' && fb_data['code'] == 200) {
+                    // console.log(fb_data);
                     if (fb_data.code == 500)
                     {
                         cleanShow();
@@ -31,7 +34,7 @@ function initAll() {
                         alert(error_message);
                         return;
                     }
-                    if (fb_data.msg == 'Success' && fb_data.code == 200) {
+                    if (fb_data.message == 'Success' && fb_data.code == 200) {
                         // console.log(fb_data['data']);
                         let analysis_result = $.parseJSON(fb_data.data);
                         cleanShow();
