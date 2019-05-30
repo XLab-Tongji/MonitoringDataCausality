@@ -79,6 +79,7 @@ public class DataController {
 
             TabularDataReader dataReader = null;
             dataReader = new ContinuousTabularDataFileReader(destFile, delimiter);
+            dataReader.setMissingValueMarker("null");
 
             try {
                 Dataset dataset = dataReader.readInData();      
@@ -90,7 +91,7 @@ public class DataController {
                     System.out.println("Not a DataSet, Terminated");
                 }
                 DataSet filteredSet = DataUtils.removeConstantColumns((DataSet) datamodel);
-                IndTestFisherZ indtest = new IndTestFisherZ(filteredSet, 0.01);
+                IndTestFisherZ indtest = new IndTestFisherZ(filteredSet, 0.05);
 
                 String jsonText = new String();
                 Graph graph = null;
