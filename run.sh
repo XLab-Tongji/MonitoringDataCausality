@@ -9,8 +9,7 @@ while getopts 'p:' OPT; do
 done
 
 #add data processing libraries
-mvn install:install-file -Dfile=src/lib/tetrad-gui-6.6.0-SNAPSHOT.jar -DgroupId=edu.cmu -DartifactId=tetrad-gui -Dversion=6.6.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
-mvn install:install-file -Dfile=src/lib/data-reader-0.2.4.jar -DgroupId=edu.pitt.dbmi -DartifactId=data-reader -Dversion=0.2.4 -Dpackaging=jar -DgeneratePom=true
+mvn install:install-file -Dfile=src/lib/tetrad-lib-6.7.0-SNAPSHOT.jar -DgroupId=edu.cmu -DartifactId=tetrad-lib -Dversion=6.7.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
 mvn package
 
 #build docker and run

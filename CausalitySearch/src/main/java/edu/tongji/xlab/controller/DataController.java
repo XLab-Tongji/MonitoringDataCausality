@@ -1,33 +1,22 @@
 package edu.tongji.xlab.controller;
 
-import edu.tongji.xlab.data.DataUtils;
+import edu.tongji.xlab.util.DataFileUtils;
 import edu.tongji.xlab.util.Response;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+
+import edu.cmu.tetrad.data.DataUtils;
+import edu.cmu.tetrad.data.DataSet;
+import edu.cmu.tetrad.graph.Graph;
+import edu.cmu.tetrad.search.Fci;
+import edu.cmu.tetrad.search.IndTestFisherZ;
+import edu.cmu.tetrad.search.Pc;
+
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import edu.tongji.xlab.data.DataModel;
-import edu.tongji.xlab.data.DataSet;
-import edu.tongji.xlab.graph.Graph;
-import edu.tongji.xlab.search.Fci;
-import edu.tongji.xlab.search.IndTestFisherZ;
-import edu.tongji.xlab.search.Pc;
-import edu.tongji.xlab.util.DataConvertUtils;
-import edu.pitt.dbmi.data.Dataset;
-import edu.pitt.dbmi.data.Delimiter;
-import edu.pitt.dbmi.data.reader.tabular.ContinuousTabularDataFileReader;
-import edu.pitt.dbmi.data.reader.tabular.TabularDataReader;
-import edu.pitt.dbmi.data.validation.DataValidation;
-import edu.pitt.dbmi.data.validation.ValidationResult;
-import edu.pitt.dbmi.data.validation.tabular.ContinuousTabularDataFileValidation;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.LinkedList;
-import java.util.List;
 import java.io.File;
 
 @RestController
@@ -51,77 +40,37 @@ public class DataController {
             destFile.getParentFile().mkdirs();
             file.transferTo(destFile);
 
-            Delimiter delimiter = Delimiter.COMMA;
-            DataValidation validatior = new ContinuousTabularDataFileValidation(destFile, delimiter);
-            validatior.validate();
+            DataSet dataset = DataFileUtils.convertDataFileToDataset(destFile);
 
-            List<ValidationResult> results = validatior.getValidationResults();
-            List<ValidationResult> infos = new LinkedList<>();
-            // Just leave the warnings here to future use - Zhou
-            List<ValidationResult> warnings = new LinkedList<>();
-            List<ValidationResult> errors = new LinkedList<>();
+            DataSet filteredSet = DataUtils.removeConstantColumns(dataset);
+            IndTestFisherZ indtest = new IndTestFisherZ(filteredSet, 0.05);
 
-            for (ValidationResult result : results) {
-                switch (result.getCode()) {
-                    case INFO:
-                        infos.add(result);
-                        break;
-                    case WARNING:
-                        warnings.add(result);
-                        break;
-                    default:
-                        errors.add(result);
-                }
+            String jsonText = new String();
+            Graph graph = null;
+            if (algorithm.equals("Fci")) {
+                Fci fci = new Fci(indtest);
+                graph = fci.search();
+            } else if (algorithm.equals("Pc")) {
+                Pc pc = new Pc(indtest);
+                graph = pc.search();
             }
 
-            System.out.println("INFO: " + infos.size() + " WARNING: " + warnings.size() + " ERRORS: " + errors.size());
-
-
-            TabularDataReader dataReader = null;
-            dataReader = new ContinuousTabularDataFileReader(destFile, delimiter);
-            dataReader.setMissingValueMarker("null");
-
-            try {
-                Dataset dataset = dataReader.readInData();      
-                DataModel datamodel = DataConvertUtils.toDataModel(dataset);
-                
-                if (datamodel instanceof DataSet)
-                    System.out.println("This is a DataSet");
-                else {
-                    System.out.println("Not a DataSet, Terminated");
-                }
-                DataSet filteredSet = DataUtils.removeConstantColumns((DataSet) datamodel);
-                IndTestFisherZ indtest = new IndTestFisherZ(filteredSet, 0.05);
-
-                String jsonText = new String();
-                Graph graph = null;
-                if (algorithm.equals("Fci")) {
-                    Fci fci = new Fci(indtest);
-                    graph = fci.search();
-                } else if (algorithm.equals("Pc")) {
-                    Pc pc = new Pc(indtest);
-                    graph = pc.search();
-                }
-
-                if (format.equals("text")) {
-                    jsonText = graph.toString();
-                } else {
-                    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-                    jsonText = gson.toJson(graph);
-                }
-
-                if (destFile.exists()) {
-                    destFile.delete();
-                }
-
-                response = new Response(200, "Success", jsonText);
-
-            } catch (IOException e) {
-                response = new Response(500, "Error");
+            if (format.equals("text")) {
+                jsonText = graph.toString();
+            } else {
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                jsonText = gson.toJson(graph);
             }
+
+            if (destFile.exists()) {
+                destFile.delete();
+            }
+
+            response = new Response(200, "Success", jsonText);
+
         } catch (Exception e) {
             e.printStackTrace();
-            response = new Response(500, "Error");
+            response = new Response(500, "Error"+e.getMessage());
         }
         return response;
     }
