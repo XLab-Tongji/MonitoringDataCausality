@@ -11,6 +11,7 @@ done
 #add data processing libraries and build package
 cd CausalitySearch
 mvn install:install-file -Dfile=src/lib/tetrad-lib-6.7.0-SNAPSHOT.jar -DgroupId=edu.cmu -DartifactId=tetrad-lib -Dversion=6.7.0-SNAPSHOT -Dpackaging=jar -DgeneratePom=true
+mvn install:install-file -Dfile=src/lib/data-reader-1.1.0.jar -DgroupId=edu.pitt.dbmi -DartifactId=data-reader -Dversion=1.1.0 -Dpackaging=jar -DgeneratePom=true
 mvn package
 cd ..
 #build docker and run
