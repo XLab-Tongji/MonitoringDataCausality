@@ -1,14 +1,12 @@
 package edu.tongji.xlab.controller;
 
+import edu.cmu.tetrad.search.*;
 import edu.tongji.xlab.util.DataFileUtils;
 import edu.tongji.xlab.util.Response;
 
 import edu.cmu.tetrad.data.DataUtils;
 import edu.cmu.tetrad.data.DataSet;
 import edu.cmu.tetrad.graph.Graph;
-import edu.cmu.tetrad.search.Fci;
-import edu.cmu.tetrad.search.IndTestFisherZ;
-import edu.cmu.tetrad.search.Pc;
 
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,7 +25,9 @@ public class DataController {
     public Response upload(HttpServletRequest request,
                            @RequestParam("file") MultipartFile file,
                            @RequestParam("algorithm") String algorithm,
-                           @RequestParam("format") String format) throws IOException {
+                           @RequestParam("format") String format,
+                           @RequestParam(value = "indtest", defaultValue = "fisherz" ,required = false) String indtest)
+            throws IOException {
 //        model.addAttribute("data", "");
         Response response;
         if (file.isEmpty()) {
@@ -43,15 +43,26 @@ public class DataController {
             DataSet dataset = DataFileUtils.convertDataFileToDataset(destFile);
 
             DataSet filteredSet = DataUtils.removeConstantColumns(dataset);
-            IndTestFisherZ indtest = new IndTestFisherZ(filteredSet, 0.05);
+
+            IndependenceTest ind_test;
+            if(indtest.equals("fisherz")) {
+                ind_test = new IndTestFisherZ(filteredSet, 0.05);
+            }else if(indtest.equals("ttest")){
+                ind_test = new IndTestCorrelationT(filteredSet, 0.05);
+            }else if(indtest.equals("gsquare")){
+                ind_test = new IndTestGSquare(filteredSet, 0.05);
+            }else{
+                ind_test = new IndTestFisherZ(filteredSet, 0.05);
+            }
+
 
             String jsonText = new String();
             Graph graph = null;
             if (algorithm.equals("Fci")) {
-                Fci fci = new Fci(indtest);
+                Fci fci = new Fci(ind_test);
                 graph = fci.search();
             } else if (algorithm.equals("Pc")) {
-                Pc pc = new Pc(indtest);
+                Pc pc = new Pc(ind_test);
                 graph = pc.search();
             }
 
