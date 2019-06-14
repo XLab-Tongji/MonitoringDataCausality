@@ -4,7 +4,7 @@ A web client to build causality graph from a monitoring dataset.
 
 ## How to Run It
 
-Run shell script(the default port is 8080)
+Run shell script(docker and maven required, the default port is 8080)
 
 ```shell
 bash run.py -p [PORT]
